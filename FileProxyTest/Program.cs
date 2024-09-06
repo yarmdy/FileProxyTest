@@ -1,3 +1,6 @@
+using System.Security.Cryptography;
+using System.Text;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -29,7 +32,17 @@ public class FileCacheOptions
     /// </summary>
     public DateTime FileModifiedTime { get; set; }
     /// <summary>
-    /// 启发缓存过期时间
+    /// 缓存过期时间
     /// </summary>
     public int ExpiredSeconds { get; set; }
+}
+
+public static class Md5StringExtensions
+{
+    public static async Task<string> ToSha256String(this object obj)
+    {
+        var data = Encoding.UTF8.GetBytes(obj?.ToString()??string.Empty);
+        var ms = new MemoryStream(data);
+        return string.Join(string.Empty, (await MD5.HashDataAsync(ms)).Select(x => x.ToString("x2")));
+    }
 }
