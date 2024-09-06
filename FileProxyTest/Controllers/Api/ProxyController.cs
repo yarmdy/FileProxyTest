@@ -32,7 +32,7 @@ namespace FileProxyTest.Controllers
             // 启发缓存时间换算，启发过期时间 = 响应头 (Date - LastModified)*10%  ,这里的DateTimeOffset.Now粗略等于Date，不需要太精确
             var time = DateTimeOffset.Now.AddSeconds(-options.ExpiredSeconds*10);
             // 构建etag，加上统一文件过期时间，统一一下缓存策略
-            var etag = $"\"{await url.ToSha256String()}{await options.FileModifiedTime.ToSha256String()}\"";
+            var etag = $"\"{await url.ToSha256StringAsync()}{await options.FileModifiedTime.ToSha256StringAsync()}\"";
             // 获取客户端上次的ETag
             var clientTag = Request.Headers.IfNoneMatch;
             // 判断ETag是否一致

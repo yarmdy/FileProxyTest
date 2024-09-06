@@ -39,10 +39,15 @@ public class FileCacheOptions
 
 public static class Md5StringExtensions
 {
-    public static async Task<string> ToSha256String(this object obj)
+    public static async Task<string> ToSha256StringAsync(this object obj)
     {
         var data = Encoding.UTF8.GetBytes(obj?.ToString()??string.Empty);
         var ms = new MemoryStream(data);
         return string.Join(string.Empty, (await MD5.HashDataAsync(ms)).Select(x => x.ToString("x2")));
+    }
+
+    public static string ToSha256String(this object obj)
+    {
+        return ToSha256StringAsync(obj).Result;
     }
 }
